@@ -25,11 +25,12 @@ export const poll = (fn: Fn, delay = 0, immediately = true) => {
             return
         }
 
-        await Promise.resolve(fn()).catch((error) => {
-            throw error
-        })
+        await fn()
 
-        await sleep(delay)
+        if (active) {
+            await sleep(delay)
+        }
+
         await watch()
     }
 
