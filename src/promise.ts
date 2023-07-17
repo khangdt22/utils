@@ -38,14 +38,7 @@ export const poll = (fn: Fn, delay = 0, immediately = true) => {
     return stop
 }
 
-export interface RetryOptions {
-    delay?: number
-    maxAttempts?: number
-}
-
-export function retry<T extends Fn>(fn: T, options: RetryOptions = {}): Promise<ReturnType<T>> {
-    const { delay = 0, maxAttempts = 3 } = options
-
+export function retry<T extends Fn>(fn: T, maxAttempts = 3, delay = 0): Promise<ReturnType<T>> {
     let attempts = 0
 
     const run = async () => {
