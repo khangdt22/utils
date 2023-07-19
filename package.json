@@ -59,7 +59,7 @@
         "@commitlint/cli": "^17.6.6",
         "@commitlint/config-conventional": "latest",
         "@khangdt22/eslint-config": "latest",
-        "@khangdt22/prettier-config": "npm:@awuxtron/prettier-config@latest",
+        "@khangdt22/prettier-config": "latest",
         "@types/node": "^20.4.2",
         "eslint": "^8.45.0",
         "lint-staged": "^13.2.3",
