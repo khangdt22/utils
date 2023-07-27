@@ -9,6 +9,7 @@ export * as obj from './object'
 export * as promise from './promise'
 export * as str from './string'
 export * as time from './time'
+export * as url from './url'
 
 export * from './types'
 export * from './vendor'
