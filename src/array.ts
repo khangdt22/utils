@@ -29,3 +29,7 @@ export function wrap<T>(array: T | T[]): T[] {
 export function sum(array: number[]): number {
     return array.reduce((a, b) => a + b, 0)
 }
+
+export function sumBigint(array: bigint[]): bigint {
+    return array.reduce((a, b) => a + b, 0n)
+}
