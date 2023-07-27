@@ -55,6 +55,9 @@ devDependencies:
     typescript:
         specifier: ^5.1.6
         version: 5.1.6
+    zod:
+        specifier: ^3.21.4
+        version: 3.21.4
 
 packages:
     /@aashutoshrathi/word-wrap@1.2.6:
@@ -8457,6 +8460,13 @@ packages:
                 integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==,
             }
         engines: { node: '>=12.20' }
+        dev: true
+
+    /zod@3.21.4:
+        resolution:
+            {
+                integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==,
+            }
         dev: true
 
     github.com/hughsk/flat/a47295f1fd7ae5a0e0bad015985b9b955acd5e65:
