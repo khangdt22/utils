@@ -3,7 +3,7 @@ import { ensurePrefix, hasPrefix, isString, stripPrefix } from './string'
 export type Hex = `0x${string}`
 
 export function isHexString(value: unknown, length?: number): value is string {
-    return isString(value) && RegExp(`^(?:0x)?[0-9a-f]${length ? '{' + length + '}' : '+'}$`, 'iu').test(value)
+    return isString(value) && RegExp(`^(?:0x)?[0-9a-f]${length ? '{' + (length * 2) + '}' : '+'}$`, 'iu').test(value)
 }
 
 export function isStrictHexString(value: unknown, length?: number): value is Hex {

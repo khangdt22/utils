@@ -3,16 +3,16 @@ import { sleep } from './time'
 
 export type Awaitable<T> = T | PromiseLike<T>
 
-export function createEmptyPromise<T>() {
-    let resolveFn: (value?: T | PromiseLike<T>) => void
-    let rejectFn: (reason?: any) => void
+export function createDeferred<T>() {
+    let resolveFn: (value: Awaitable<T>) => void = () => void 0
+    let rejectFn: (reason?: any) => void = () => void 0
 
-    const promise = new Promise<T | undefined>((resolve, reject) => {
+    const promise = new Promise<T>((resolve, reject) => {
         resolveFn = resolve
         rejectFn = reject
     })
 
-    return Object.assign(promise, { resolve: resolveFn!, reject: rejectFn! })
+    return Object.assign(promise, { resolve: resolveFn, reject: rejectFn })
 }
 
 export const poll = (fn: Fn, delay = 0, immediately = true) => {
@@ -63,7 +63,7 @@ export function retry<T extends Fn>(fn: T, maxAttempts = 3, delay = 0): Promise<
 
 export function timeout<T>(promise: Promise<T>, ms: number, message?: string): Promise<T> {
     return new Promise((resolve, reject) => {
-        const timeoutId = setTimeout(() => reject(new Error(message || `Promise timed out after ${ms} ms`)), ms)
+        const timeoutId = setTimeout(() => reject(new Error(message ?? `Promise timed out after ${ms} ms`)), ms)
 
         promise.then(resolve).catch(reject).finally(() => {
             clearTimeout(timeoutId)

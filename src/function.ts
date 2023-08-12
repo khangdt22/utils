@@ -6,7 +6,7 @@ export type Args<F extends Fn> = F extends (...args: infer A) => any ? A : never
 
 export const isFunction = <T extends Fn>(value: unknown): value is T => typeof value === 'function'
 
-export const noop = () => {}
+export const noop = () => void 0
 
 export function invoke(fn: Fn) {
     return fn()
