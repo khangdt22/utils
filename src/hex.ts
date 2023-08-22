@@ -1,4 +1,4 @@
-import { ensurePrefix, hasPrefix, isString, stripPrefix } from './string'
+import { ensurePrefix, hasPrefix, isString, stripPrefix, equalsIgnoreCase } from './string'
 
 export type Hex = `0x${string}`
 
@@ -16,4 +16,8 @@ export function stripHexPrefix(value: string): string {
 
 export function ensureHexPrefix(value: string) {
     return ensurePrefix(value, '0x') as Hex
+}
+
+export function equals(hex: string, ...others: string[]) {
+    return equalsIgnoreCase(stripHexPrefix(hex), ...others.map((i) => stripHexPrefix(i)))
 }
