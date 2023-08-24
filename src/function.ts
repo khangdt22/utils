@@ -8,7 +8,7 @@ export const isFunction = <T extends Fn>(value: unknown): value is T => typeof v
 
 export const noop = () => void 0
 
-export function invoke(fn: Fn) {
+export function invoke<F extends Fn>(fn: F): ReturnType<F> {
     return fn()
 }
 
