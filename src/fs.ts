@@ -1,5 +1,6 @@
 import { accessSync, constants, type PathLike, readFileSync, writeFileSync } from 'node:fs'
-import JSON5 from 'json5'
+import type { StringifyOptions, ParseReviver } from './json'
+import { stringify, parse } from './json'
 
 export function hasAccess(path: PathLike, mode?: number) {
     try {
@@ -23,10 +24,10 @@ export function isReadableAndWritable(path: PathLike) {
     return hasAccess(path, constants.R_OK | constants.W_OK)
 }
 
-export function readJsonFile(path: PathLike, reviver?: Parameters<typeof JSON5.parse>[1]) {
-    return JSON5.parse(readFileSync(path, 'utf8'), reviver)
+export function readJsonFile(path: PathLike, reviver?: ParseReviver) {
+    return parse(readFileSync(path, 'utf8'), reviver)
 }
 
-export function writeJsonFile(path: PathLike, data: any, options: Parameters<typeof JSON5.stringify>[1] = {}) {
-    writeFileSync(path, JSON5.stringify(data, options), { encoding: 'utf8' })
+export function writeJsonFile(path: PathLike, data: any, options?: StringifyOptions) {
+    writeFileSync(path, stringify(data, options), { encoding: 'utf8' })
 }
