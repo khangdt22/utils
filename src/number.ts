@@ -28,6 +28,12 @@ export function toNumber(input: unknown) {
     return Number(String(input))
 }
 
+export const bigIntMin = (...args: bigint[]) => args.reduce((m, e) => (e < m ? e : m))
+
+export const bigIntMax = (...args: bigint[]) => args.reduce((m, e) => (e > m ? e : m))
+
+export const bigIntAbs = (value: bigint) => (value < 0n ? -value : value)
+
 export interface FormatOptions extends Intl.NumberFormatOptions {
     locales?: string | string[]
     groupFractionLeadingZeros?: boolean
