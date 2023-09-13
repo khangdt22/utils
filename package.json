@@ -1,6 +1,6 @@
 {
     "name": "@khangdt22/utils",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "A collection of utility functions for JavaScript / TypeScript applications",
     "license": "MIT",
     "author": "Diep Dang <khangdt310722@gmail.com>",
@@ -34,9 +34,9 @@
             ]
         }
     },
-    "packageManager": "pnpm@8.6.7",
+    "packageManager": "pnpm@8.7.0",
     "engines": {
-        "node": ">=16.0.0"
+        "node": ">=18.0.0"
     },
     "publishConfig": {
         "access": "public"
@@ -58,21 +58,21 @@
         "json5": "^2.2.3"
     },
     "devDependencies": {
-        "@commitlint/cli": "^17.6.7",
+        "@commitlint/cli": "^17.7.1",
         "@commitlint/config-conventional": "latest",
         "@khangdt22/eslint-config": "latest",
         "@khangdt22/prettier-config": "latest",
-        "@types/node": "^20.4.5",
-        "eslint": "^8.45.0",
-        "lint-staged": "^13.2.3",
+        "@types/node": "^20.5.7",
+        "eslint": "^8.48.0",
+        "lint-staged": "^14.0.1",
         "np": "^8.0.4",
-        "npm-check-updates": "^16.10.17",
+        "npm-check-updates": "^16.13.2",
         "only-allow": "^1.1.1",
-        "prettier": "^3.0.0",
+        "prettier": "^3.0.2",
         "rimraf": "^5.0.1",
         "simple-git-hooks": "^2.9.0",
-        "typescript": "^5.1.6",
-        "zod": "^3.21.4"
+        "typescript": "^5.2.2",
+        "zod": "^3.22.2"
     },
     "commitlint": {
         "extends": "@commitlint/config-conventional"

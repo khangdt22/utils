@@ -12,7 +12,9 @@ export const isDate = (value: unknown): value is Date => value instanceof Date
 
 export const sleep = async (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
 
-export const timestamp = () => Math.floor(Date.now() / 1000)
+export const toTimestamp = (date: Date) => Math.floor(date.getTime() / 1000)
+
+export const timestamp = () => toTimestamp(new Date())
 
 export const ms = (value: number, duration: number) => value * duration
 
