@@ -34,7 +34,7 @@
             ]
         }
     },
-    "packageManager": "pnpm@8.7.0",
+    "packageManager": "pnpm@8.7.5",
     "engines": {
         "node": ">=18.0.0"
     },
@@ -62,13 +62,13 @@
         "@commitlint/config-conventional": "latest",
         "@khangdt22/eslint-config": "latest",
         "@khangdt22/prettier-config": "latest",
-        "@types/node": "^20.5.7",
-        "eslint": "^8.48.0",
+        "@types/node": "^20.6.0",
+        "eslint": "^8.49.0",
         "lint-staged": "^14.0.1",
         "np": "^8.0.4",
-        "npm-check-updates": "^16.13.2",
+        "npm-check-updates": "^16.14.2",
         "only-allow": "^1.1.1",
-        "prettier": "^3.0.2",
+        "prettier": "^3.0.3",
         "rimraf": "^5.0.1",
         "simple-git-hooks": "^2.9.0",
         "typescript": "^5.2.2",
