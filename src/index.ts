@@ -1,6 +1,7 @@
 export * as arr from './array'
 export * as cl from './class'
 export * as condition from './condition'
+export * as event from './event'
 export * as fs from './fs'
 export * as fn from './function'
 export * as hex from './hex'
