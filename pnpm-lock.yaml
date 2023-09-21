@@ -10,7 +10,7 @@ dependencies:
         version: 4.3.1
     flat:
         specifier: github:hughsk/flat#master
-        version: github.com/hughsk/flat/a47295f1fd7ae5a0e0bad015985b9b955acd5e65
+        version: github.com/hughsk/flat/05ac9ca6c4f612ca5ac30cd3ca8ccc396d97c4bf
     json5:
         specifier: ^2.2.3
         version: 2.2.3
@@ -29,8 +29,8 @@ devDependencies:
         specifier: latest
         version: 1.0.0
     '@types/node':
-        specifier: ^20.6.0
-        version: 20.6.0
+        specifier: ^20.6.3
+        version: 20.6.3
     eslint:
         specifier: ^8.49.0
         version: 8.49.0
@@ -41,8 +41,8 @@ devDependencies:
         specifier: ^8.0.4
         version: 8.0.4
     npm-check-updates:
-        specifier: ^16.14.2
-        version: 16.14.2
+        specifier: ^16.14.4
+        version: 16.14.4
     only-allow:
         specifier: ^1.1.1
         version: 1.1.1
@@ -244,7 +244,7 @@ packages:
             lodash.merge: 4.6.2
             lodash.uniq: 4.5.0
             resolve-from: 5.0.0
-            ts-node: 10.9.1(@types/node@20.6.0)(typescript@5.2.2)
+            ts-node: 10.9.1(@types/node@20.6.3)(typescript@5.2.2)
             typescript: 5.2.2
         transitivePeerDependencies:
             - '@swc/core'
@@ -837,7 +837,7 @@ packages:
         dependencies:
             '@types/http-cache-semantics': 4.0.1
             '@types/keyv': 3.1.4
-            '@types/node': 20.6.0
+            '@types/node': 20.6.3
             '@types/responselike': 1.0.0
         dev: true
 
@@ -861,7 +861,7 @@ packages:
                 integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==,
             }
         dependencies:
-            '@types/node': 20.6.0
+            '@types/node': 20.6.3
         dev: true
 
     /@types/minimist@1.2.2:
@@ -878,10 +878,10 @@ packages:
             }
         dev: true
 
-    /@types/node@20.6.0:
+    /@types/node@20.6.3:
         resolution:
             {
-                integrity: sha512-najjVq5KN2vsH2U/xyh2opaSEz6cZMR2SetLIlxlj08nOcmPOemJmUK2o4kUzfLqfrWE0PIrNeE16XhYDd3nqg==,
+                integrity: sha512-HksnYH4Ljr4VQgEy2lTStbCKv/P590tmPe5HqOnv9Gprffgv5WXAY+Y5Gqniu0GGqeTCUdBnzC3QSrzPkBkAMA==,
             }
         dev: true
 
@@ -898,7 +898,7 @@ packages:
                 integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==,
             }
         dependencies:
-            '@types/node': 20.6.0
+            '@types/node': 20.6.3
         dev: true
 
     /@types/semver@7.5.1:
@@ -2260,7 +2260,7 @@ packages:
         dependencies:
             '@types/node': 20.4.7
             cosmiconfig: 8.2.0
-            ts-node: 10.9.1(@types/node@20.6.0)(typescript@5.2.2)
+            ts-node: 10.9.1(@types/node@20.6.3)(typescript@5.2.2)
             typescript: 5.2.2
         dev: true
 
@@ -5900,10 +5900,10 @@ packages:
             npm-normalize-package-bin: 3.0.1
         dev: true
 
-    /npm-check-updates@16.14.2:
+    /npm-check-updates@16.14.4:
         resolution:
             {
-                integrity: sha512-7zLXG5h4ZyAHxSKDRs864ugVPM40EpKDwInwZMvCRMJ+h2oyVlAKB69XuBKB4qnur+KR+yj5ndXIIDKZYzUX8A==,
+                integrity: sha512-PKg1wv3vno75/9qgRLqV2huBO7eukOlW+PmIGl7LPXjElfYTUTWUtaMOdOckImaSj4Uqe46W/zMbMFZQp5dHRQ==,
             }
         engines: { node: '>=14.14' }
         hasBin: true
@@ -7949,7 +7949,7 @@ packages:
         engines: { node: '>=8' }
         dev: true
 
-    /ts-node@10.9.1(@types/node@20.6.0)(typescript@5.2.2):
+    /ts-node@10.9.1(@types/node@20.6.3)(typescript@5.2.2):
         resolution:
             {
                 integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==,
@@ -7971,7 +7971,7 @@ packages:
             '@tsconfig/node12': 1.0.11
             '@tsconfig/node14': 1.0.3
             '@tsconfig/node16': 1.0.4
-            '@types/node': 20.6.0
+            '@types/node': 20.6.3
             acorn: 8.10.0
             acorn-walk: 8.2.0
             arg: 4.1.3
@@ -8632,10 +8632,10 @@ packages:
             }
         dev: true
 
-    github.com/hughsk/flat/a47295f1fd7ae5a0e0bad015985b9b955acd5e65:
-        resolution: { tarball: https://codeload.github.com/hughsk/flat/tar.gz/a47295f1fd7ae5a0e0bad015985b9b955acd5e65 }
+    github.com/hughsk/flat/05ac9ca6c4f612ca5ac30cd3ca8ccc396d97c4bf:
+        resolution: { tarball: https://codeload.github.com/hughsk/flat/tar.gz/05ac9ca6c4f612ca5ac30cd3ca8ccc396d97c4bf }
         name: flat
-        version: 6.0.0
-        engines: { node: '>=14.16' }
+        version: 6.0.1
+        engines: { node: '>=18' }
         hasBin: true
         dev: false
