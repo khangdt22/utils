@@ -39,7 +39,7 @@ export const poll = (fn: Fn, delay = 0, immediately = true) => {
     return stop
 }
 
-export function retry<T extends Fn>(fn: T, maxAttempts = 3, delay = 0): Promise<ReturnType<T>> {
+export function withRetry<T extends Fn>(fn: T, maxAttempts = 3, delay = 0): Promise<ReturnType<T>> {
     let attempts = 0
 
     const run = async () => {
@@ -61,9 +61,9 @@ export function retry<T extends Fn>(fn: T, maxAttempts = 3, delay = 0): Promise<
     return run()
 }
 
-export function timeout<T>(promise: Promise<T>, ms: number, message?: string): Promise<T> {
+export function withTimeout<T>(promise: Promise<T>, ms: number, message?: Error | string): Promise<T> {
     return new Promise((resolve, reject) => {
-        const timeoutId = setTimeout(() => reject(new Error(message ?? `Promise timed out after ${ms} ms`)), ms)
+        const timeoutId = setTimeout(() => reject(message instanceof Error ? message : new Error(message ?? `Promise timed out after ${ms} ms`)), ms)
 
         promise.then(resolve).catch(reject).finally(() => {
             clearTimeout(timeoutId)
