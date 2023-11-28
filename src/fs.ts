@@ -1,5 +1,8 @@
-import { accessSync, constants, type PathLike, readFileSync, writeFileSync, createReadStream } from 'node:fs'
+import { accessSync, constants, type PathLike, readFileSync, writeFileSync, createReadStream, existsSync, createWriteStream } from 'node:fs'
+import { join, parse as parsePath } from 'node:path'
 import { createHash, type HashOptions } from 'node:crypto'
+import { mkdir, rm, unlink } from 'node:fs/promises'
+import { get } from 'node:https'
 import type { StringifyOptions, ParseReviver } from './json'
 import { stringify, parse } from './json'
 import { createDeferred } from './promise'
@@ -39,8 +42,20 @@ export interface GetFileHashOptions {
     stream?: Parameters<typeof createReadStream>[1]
 }
 
-export async function verifyFileHash(path: PathLike, hash: string, algorithm: string, options?: GetFileHashOptions) {
-    return getFileHash(path, algorithm, options).then((checksum) => checksum === hash)
+export interface VerifyFileHashOptions extends GetFileHashOptions {
+    throwOnInvalid?: boolean
+}
+
+export async function verifyFileHash(path: PathLike, hash: string, algorithm: string, options?: VerifyFileHashOptions) {
+    const fileHash = await getFileHash(path, algorithm, options)
+    const isValid = fileHash === hash
+    const { throwOnInvalid = true } = options ?? {}
+
+    if (!isValid && throwOnInvalid) {
+        throw new Error(`File ${path} is corrupted, hash: ${fileHash}, expected: ${hash}`)
+    }
+
+    return isValid
 }
 
 export async function getFileHash(path: PathLike, algorithm: string, options: GetFileHashOptions = {}) {
@@ -53,4 +68,44 @@ export async function getFileHash(path: PathLike, algorithm: string, options: Ge
     stream.on('end', () => checksum.resolve(hash.digest('hex')))
 
     return checksum
+}
+
+export interface DownloadFileOptions {
+    filename?: string
+    stream?: Parameters<typeof createWriteStream>[1]
+}
+
+export async function downloadFile(url: string, outDir: string, options: DownloadFileOptions = {}) {
+    const filename = options.filename ?? parsePath(new URL(url).pathname).base
+    const output = join(outDir, filename)
+
+    let createDir = false
+
+    if (!existsSync(outDir)) {
+        await mkdir(outDir, { recursive: true }).then(() => createDir = true)
+    }
+
+    const file = createWriteStream(output, options.stream)
+    const isDownloaded = createDeferred<string>()
+
+    get(url, (response) => {
+        response.pipe(file)
+
+        file.on('error', async (error) => {
+            await unlink(output)
+
+            if (createDir) {
+                await rm(outDir, { recursive: true, force: true })
+            }
+
+            isDownloaded.reject(error)
+        })
+
+        file.on('finish', () => {
+            file.close()
+            isDownloaded.resolve(output)
+        })
+    })
+
+    return isDownloaded
 }
