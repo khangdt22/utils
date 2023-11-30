@@ -6,13 +6,18 @@ export type Awaitable<T> = T | PromiseLike<T>
 export function createDeferred<T>() {
     let resolveFn: (value: Awaitable<T>) => void = () => void 0
     let rejectFn: (reason?: any) => void = () => void 0
+    let isSettled = false
 
     const promise = new Promise<T>((resolve, reject) => {
         resolveFn = resolve
         rejectFn = reject
     })
 
-    return Object.assign(promise, { resolve: resolveFn, reject: rejectFn })
+    promise.finally(() => {
+        isSettled = true
+    })
+
+    return Object.assign(promise, { resolve: resolveFn, reject: rejectFn, isSettled })
 }
 
 export const poll = (fn: Fn, delay = 0, immediately = true) => {
