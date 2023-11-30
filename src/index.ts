@@ -12,6 +12,7 @@ export * as promise from './promise'
 export * as str from './string'
 export * as time from './time'
 export * as url from './url'
+export * as ws from './ws'
 export * as zod from './zod'
 
 export * from './types'

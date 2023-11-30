@@ -1,3 +1,4 @@
+import pRetry, { type Options } from 'p-retry'
 import type { Fn } from './function'
 import { sleep } from './time'
 
@@ -45,26 +46,25 @@ export const poll = (fn: Fn, delay = 0, immediately = true) => {
     return stop
 }
 
-export function withRetry<T extends Fn>(fn: T, maxAttempts = 3, delay = 0): Promise<ReturnType<T>> {
-    let attempts = 0
+export type RetryOptions = Options & {
+    delay?: number
+}
 
-    const run = async () => {
-        try {
-            return fn()
-        } catch (error) {
-            attempts++
+export function withRetry<T extends Fn>(fn: T, maxAttempts?: number, delay?: number): Promise<ReturnType<T>>
 
-            if (attempts >= maxAttempts) {
-                throw error
-            }
+export function withRetry<T extends Fn>(fn: T, options?: RetryOptions): Promise<ReturnType<T>>
 
-            await sleep(delay)
+// eslint-disable-next-line max-len
+export function withRetry<T extends Fn>(fn: T, params: RetryOptions | number = {}, delay?: number): Promise<ReturnType<T>> {
+    const options: RetryOptions = typeof params === 'number' ? { retries: params, delay } : params
 
-            return run()
-        }
-    }
-
-    return run()
+    return pRetry(fn, {
+        ...options,
+        onFailedAttempt: async (error) => {
+            await sleep(options.delay ?? 0)
+            await options.onFailedAttempt?.(error)
+        },
+    })
 }
 
 export function withTimeout<T>(promise: Promise<T>, ms: number, message?: Error | string): Promise<T> {
