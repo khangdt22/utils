@@ -53,6 +53,20 @@ export enum WebsocketClientState {
     DISCONNECTED = 'DISCONNECTED',
 }
 
+export class WebsocketError extends Error {
+    public constructor(public readonly address: string, message?: string, options?: ErrorOptions) {
+        super(message, options)
+    }
+}
+
+export class WebsocketRequestError extends WebsocketError {
+    public setRequestData(data: any) {
+        Object.defineProperty(this, 'data', { value: data })
+
+        return this
+    }
+}
+
 export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
     public state: WebsocketClientState = WebsocketClientState.INITIAL
 
@@ -105,7 +119,9 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
         this.emit('reconnect')
         this.client?.terminate()
 
-        await withRetry(() => this.init(), retries, delay).then(() => this.emit('reconnected'))
+        await withRetry(() => this.init(), retries, delay).then(() => this.emit('reconnected')).catch((error) => {
+            throw new WebsocketError(this.address, 'Reconnect failed', { cause: error })
+        })
     }
 
     public async disconnect(code?: number, reason?: Buffer | string) {
@@ -128,7 +144,7 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
 
     public async send(data: any, type: 'ping' | 'pong' | 'message' = 'message') {
         if (!this.ready) {
-            throw new Error('Not connected')
+            throw new WebsocketError(this.address, 'Not connected')
         }
 
         const isSent = createDeferred<void>()
@@ -142,7 +158,9 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
             this.client!.send(data, cb)
         }
 
-        return withTimeout(isSent, this.requestTimeout, 'Request timeout')
+        return withTimeout(isSent, this.requestTimeout, 'Request timeout').catch((error) => {
+            throw new WebsocketRequestError(this.address, 'Request error', { cause: error }).setRequestData(data)
+        })
     }
 
     public async ping(data: any) {
@@ -159,7 +177,7 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
         const isConnected = createDeferred<void>()
         const client = this.client = new WebSocket(this.address, this.options)
 
-        client.on('close', (code, reason) => (isConnected.isSettled ? this.onClose(code, reason) : isConnected.reject(new Error('Unexpected close'))))
+        client.on('close', (code, reason) => (isConnected.isSettled ? this.onClose(code, reason) : isConnected.reject(new WebsocketError(this.address, 'Unexpected close'))))
         client.on('error', (error) => (isConnected.isSettled ? this.onError(error) : isConnected.reject(error)))
         client.on('message', this.onMessage.bind(this))
         client.on('open', () => Promise.resolve(this.onOpen()).then(() => isConnected.resolve()))
@@ -169,7 +187,9 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
         client.on('unexpected-response', (request, response) => this.emit('unexpected-response', request, response))
         client.on('upgrade', (response) => this.emit('upgrade', response))
 
-        return withTimeout(isConnected, this.connectTimeout, 'Connect timeout')
+        return withTimeout(isConnected, this.connectTimeout, 'Connect timeout').catch((error) => {
+            throw new WebsocketError(this.address, 'Connect failed', { cause: error })
+        })
     }
 
     protected onOpen() {
@@ -218,7 +238,7 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
         }
 
         if (this.listenerCount('error') === 0) {
-            throw error
+            throw new WebsocketError(this.address, 'An error occurred', { cause: error })
         } else {
             this.emit('error', error)
         }
