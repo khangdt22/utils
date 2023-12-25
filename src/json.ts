@@ -1,12 +1,17 @@
 import JSON5 from 'json5'
 import { isBigInt } from './number'
 import { isObject } from './object'
+import { wrap } from './array'
 
 export type ParseReviver = Parameters<typeof JSON5.parse>[1]
 
-export type StringifyOptions = Parameters<typeof JSON5.stringify>[1]
+export type StringifyReplacer = (key: string, value: any) => any
 
-export const bigIntSerialize: StringifyOptions['replacer'] = (_, value) => {
+export type StringifyOptions = Omit<Parameters<typeof JSON5.stringify>[1], 'replacer'> & {
+    replacer?: StringifyReplacer | StringifyReplacer[]
+}
+
+export const bigIntSerialize: StringifyReplacer = (_, value) => {
     return isBigInt(value) ? { type: 'bigint', value: value.toString() } : value
 }
 
@@ -18,14 +23,29 @@ export const bigIntDeserialize: ParseReviver = (_, value) => {
     return value
 }
 
-export function parse(data: string, reviver: ParseReviver = bigIntDeserialize) {
-    return JSON5.parse(data, reviver)
+export function parse(data: string, reviver: ParseReviver | ParseReviver[] = bigIntDeserialize) {
+    const revivers = wrap(reviver)
+
+    return JSON5.parse(data, (key, value) => {
+        for (const rv of revivers) {
+            value = rv ? rv(key, value) : value
+        }
+
+        return value
+    })
 }
 
 export function stringify(data: any, options: StringifyOptions = {}) {
-    if (!options.replacer) {
-        options.replacer = bigIntSerialize
+    const { replacer = bigIntDeserialize, ...rest } = options
+    const replacers = Array.isArray(replacer) ? replacer : [replacer]
+
+    const rpl = (key: string, value: any) => {
+        for (const r of replacers) {
+            value = r ? r(key, value) : value
+        }
+
+        return value
     }
 
-    return JSON5.stringify(data, options)
+    return JSON5.stringify(data, { ...rest, replacer: rpl })
 }
