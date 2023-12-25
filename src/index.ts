@@ -1,5 +1,6 @@
 export * as arr from './array'
 export * as cl from './class'
+export * as cli from './cli'
 export * as condition from './condition'
 export * as event from './event'
 export * as fn from './function'
