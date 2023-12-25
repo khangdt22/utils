@@ -13,19 +13,11 @@ export function isObject(input: any): input is AnyObject {
 }
 
 export function isKeyOf<T extends AnyObject>(obj: T, name: PropertyKey): name is keyof T {
-    if (!isObject(obj)) {
-        return false
-    }
-
     return name in obj
 }
 
 export function hasOwnProperty<T extends AnyObject>(obj: T, name: PropertyKey): name is keyof T {
-    if (!isObject(obj)) {
-        return false
-    }
-
-    return Object.prototype.hasOwnProperty.call(obj, name)
+    return Object.hasOwn(obj, name)
 }
 
 export function entries<O extends AnyObject>(obj: O) {
