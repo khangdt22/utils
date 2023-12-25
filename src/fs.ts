@@ -1,4 +1,4 @@
-import { accessSync, constants, type PathLike, readFileSync, writeFileSync, createReadStream, existsSync, createWriteStream, lstatSync } from 'node:fs'
+import { accessSync, constants, type PathLike, readFileSync, writeFileSync, createReadStream, existsSync, createWriteStream, lstatSync, mkdirSync, type MakeDirectoryOptions } from 'node:fs'
 import { join, parse as parsePath } from 'node:path'
 import { createHash, type HashOptions } from 'node:crypto'
 import { mkdir, rm, unlink, writeFile } from 'node:fs/promises'
@@ -35,6 +35,12 @@ export function isFile(path: PathLike) {
 
 export function isDirectory(path: PathLike) {
     return lstatSync(path).isDirectory()
+}
+
+export function ensureDirectory(path: PathLike, options: MakeDirectoryOptions = {}) {
+    if (!existsSync(path)) {
+        mkdirSync(path, { recursive: true, ...options })
+    }
 }
 
 export function readJsonFile(path: PathLike, reviver?: ParseReviver) {
