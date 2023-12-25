@@ -56,3 +56,15 @@ export function shuffle<T>(input: T[]): T[] {
 
     return array
 }
+
+export function intersection<T>(a: T[], b: T[]): T[] {
+    return a.filter((v) => b.includes(v))
+}
+
+export function difference<T>(a: T[], b: T[]): T[] {
+    return a.filter((v) => !b.includes(v))
+}
+
+export function symmetricDifference<T>(a: T[], b: T[]): T[] {
+    return [...difference(a, b), ...difference(b, a)]
+}
