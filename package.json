@@ -10,117 +10,37 @@
         "email": "khangdt310722@gmail.com",
         "url": "https://github.com/khangdt22/utils/issues"
     },
-    "type": "module",
-    "sideEffects": false,
     "files": [
-        "dist",
-        "src"
+        "*",
+        "!**/*.tsbuildinfo"
     ],
     "engines": {
         "node": ">=18.0.0"
     },
     "publishConfig": {
-        "access": "public"
+        "access": "public",
+        "directory": "dist"
     },
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "type": "module",
+    "main": "./lib/index.js",
+    "types": "./lib/index.d.ts",
     "exports": {
         ".": {
-            "import": {
-                "default": "./dist/index.js",
-                "types": "./dist/index.d.ts"
-            },
-            "require": {
-                "default": "./dist/index.cjs",
-                "types": "./dist/index.d.cts"
-            }
+            "default": "./lib/index.js",
+            "require": "./lib/index.cjs",
+            "types": "./lib/index.d.ts"
         },
         "./*": {
-            "import": {
-                "default": "./dist/*.js",
-                "types": "./dist/*.d.ts"
-            },
-            "require": {
-                "default": "./dist/*.cjs",
-                "types": "./dist/*.d.cts"
-            }
-        }
-    },
-    "typesVersions": {
-        "*": {
-            ".": [
-                "./dist/index"
-            ],
-            "array": [
-                "./dist/array"
-            ],
-            "class": [
-                "./dist/class"
-            ],
-            "condition": [
-                "./dist/condition"
-            ],
-            "event": [
-                "./dist/event"
-            ],
-            "fs": [
-                "./dist/fs"
-            ],
-            "function": [
-                "./dist/function"
-            ],
-            "hex": [
-                "./dist/hex"
-            ],
-            "index": [
-                "./dist/index"
-            ],
-            "json": [
-                "./dist/json"
-            ],
-            "number": [
-                "./dist/number"
-            ],
-            "object": [
-                "./dist/object"
-            ],
-            "options": [
-                "./dist/options"
-            ],
-            "promise": [
-                "./dist/promise"
-            ],
-            "string": [
-                "./dist/string"
-            ],
-            "time": [
-                "./dist/time"
-            ],
-            "types": [
-                "./dist/types"
-            ],
-            "url": [
-                "./dist/url"
-            ],
-            "vendor": [
-                "./dist/vendor"
-            ],
-            "websocket-client": [
-                "./dist/websocket-client"
-            ],
-            "ws": [
-                "./dist/ws"
-            ],
-            "zod": [
-                "./dist/zod"
-            ]
+            "default": "./lib/*.js",
+            "require": "./lib/*.cjs",
+            "types": "./lib/*.d.ts"
         }
     },
     "scripts": {
-        "build": "tsc --noEmit && tsup",
-        "release": "np --no-yarn --no-release-draft --yolo --message='chore: release v%s'",
+        "build": "rimraf dist && tsup && tsc --project ./tsconfig.build.json",
+        "release": "np --no-yarn --no-release-draft --yolo --no-publish --message='chore: release v%s' && pnpm publish",
         "up": "ncu -i",
-        "lint": "pnpm prettier '**/*.!(js|ts)' && pnpm eslint .",
+        "lint": "pnpm prettier '*.!(js|jsx|cjs|cjsx|mjs|mjsx|ts|tsx|cts|ctsx|mts|mtsx|d.ts|vue)' && pnpm eslint .",
         "eslint": "eslint --ignore-path .gitignore --fix",
         "prettier": "prettier --ignore-path .gitignore --ignore-unknown --write",
         "preinstall": "npx only-allow pnpm",
@@ -132,26 +52,28 @@
         "deepmerge": "^4.3.1",
         "flat": "github:hughsk/flat#master",
         "json5": "^2.2.3",
-        "p-retry": "^6.1.0",
+        "p-retry": "^6.2.0",
         "ws": "^8.15.1"
     },
     "devDependencies": {
-        "@commitlint/cli": "^18.4.3",
+        "@commitlint/cli": "latest",
         "@commitlint/config-conventional": "latest",
         "@khangdt22/eslint-config": "latest",
         "@khangdt22/prettier-config": "latest",
-        "@swc/core": "^1.3.100",
-        "@types/node": "^20.10.4",
-        "eslint": "^8.55.0",
-        "lint-staged": "^15.2.0",
-        "np": "^9.2.0",
-        "npm-check-updates": "^16.14.12",
-        "only-allow": "^1.2.1",
-        "prettier": "^3.1.1",
-        "simple-git-hooks": "^2.9.0",
-        "tsup": "^8.0.1",
-        "typescript": "^5.3.3",
-        "zod": "^3.22.4"
+        "@swc/core": "latest",
+        "@types/node": "latest",
+        "eslint": "latest",
+        "fast-glob": "latest",
+        "lint-staged": "latest",
+        "np": "latest",
+        "npm-check-updates": "latest",
+        "only-allow": "latest",
+        "prettier": "latest",
+        "rimraf": "latest",
+        "simple-git-hooks": "latest",
+        "tsup": "latest",
+        "typescript": "latest",
+        "zod": "latest"
     },
     "commitlint": {
         "extends": "@commitlint/config-conventional"
@@ -160,12 +82,12 @@
         "extends": "@khangdt22"
     },
     "lint-staged": {
-        "*.{js,ts}": "pnpm eslint",
-        "*.!(js|ts)": "pnpm prettier"
+        "*.{js,jsx,cjs,cjsx,mjs,mjsx,ts,tsx,cts,ctsx,mts,mtsx,vue}": "pnpm eslint",
+        "*.!(js|jsx|cjs|cjsx|mjs|mjsx|ts|tsx|cts|ctsx|mts|mtsx|d.ts|vue)": "pnpm prettier"
     },
     "prettier": "@khangdt22/prettier-config",
     "simple-git-hooks": {
         "commit-msg": "npx --no -- commitlint --edit ${1}",
-        "pre-commit": "npx tsc --noEmit && npx lint-staged"
+        "pre-commit": "npx lint-staged"
     }
 }

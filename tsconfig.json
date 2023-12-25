@@ -1,24 +1,4 @@
 {
-    "compilerOptions": {
-        "declaration": true,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "lib": ["ES2022", "DOM"],
-        "module": "ES2022",
-        "moduleResolution": "Node",
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitAny": false,
-        "noImplicitOverride": true,
-        "noImplicitReturns": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "outDir": "dist",
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "sourceMap": true,
-        "strict": true,
-        "target": "ES2022",
-        "verbatimModuleSyntax": true
-    },
-    "exclude": ["dist/**", "node_modules/**"]
+    "extends": "./tsconfig.base.json",
+    "include": ["*.ts", "src"]
 }
