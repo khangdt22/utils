@@ -1,6 +1,6 @@
 {
     "name": "@khangdt22/utils",
-    "version": "0.0.18",
+    "version": "0.0.19",
     "description": "A collection of utility functions for JavaScript / TypeScript applications",
     "license": "MIT",
     "author": "Diep Dang <khangdt310722@gmail.com>",
