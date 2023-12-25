@@ -3,11 +3,11 @@ import { existsSync } from 'node:fs'
 import { mkdir, cp, writeFile } from 'node:fs/promises'
 import fg from 'fast-glob'
 import { defineConfig } from 'tsup'
-import { readJsonFile } from './src/fs'
 import { omit } from './src/object'
+import { readJsonFile } from './src/fs'
 
 export default defineConfig({
-    entry: ['src/*.ts'],
+    entry: ['src/**/*.ts'],
     outDir: 'dist/lib',
     format: ['esm', 'cjs'],
     clean: true,
@@ -18,7 +18,7 @@ export default defineConfig({
         const files = fg.sync('src/**/*', { onlyFiles: true })
 
         for (const file of files) {
-            const { dir, base } = parse(file.replace('src/', ''))
+            const { dir, base } = parse(file)
             const outDir = join('dist', dir)
 
             if (dir.length > 0 && !existsSync(dir)) {

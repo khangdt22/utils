@@ -23,17 +23,17 @@
     },
     "type": "module",
     "main": "./lib/index.js",
-    "types": "./lib/index.d.ts",
+    "types": "./index.d.ts",
     "exports": {
         ".": {
             "default": "./lib/index.js",
             "require": "./lib/index.cjs",
-            "types": "./lib/index.d.ts"
+            "types": "./index.d.ts"
         },
         "./*": {
             "default": "./lib/*.js",
             "require": "./lib/*.cjs",
-            "types": "./lib/*.d.ts"
+            "types": "./*.d.ts"
         }
     },
     "scripts": {
