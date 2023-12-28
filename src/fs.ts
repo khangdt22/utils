@@ -1,11 +1,21 @@
 import { accessSync, constants, type PathLike, readFileSync, writeFileSync, createReadStream, existsSync, createWriteStream, lstatSync, mkdirSync, type MakeDirectoryOptions } from 'node:fs'
-import { join, parse as parsePath } from 'node:path'
+import { dirname, join, parse as parsePath } from 'node:path'
 import { createHash, type HashOptions } from 'node:crypto'
 import { mkdir, rm, unlink, writeFile } from 'node:fs/promises'
 import { get } from 'node:https'
+import { Buffer } from 'node:buffer'
 import type { StringifyOptions, ParseReviver } from './json'
 import { stringify, parse } from './json'
 import { createDeferred } from './promise'
+import { bufferToString } from './buffer'
+
+export function pathToString(path: PathLike) {
+    if (Buffer.isBuffer(path)) {
+        return bufferToString(path)
+    }
+
+    return path.toString()
+}
 
 export function hasAccess(path: PathLike, mode?: number) {
     try {
@@ -23,6 +33,20 @@ export function isReadable(path: PathLike) {
 
 export function isWritable(path: PathLike) {
     return hasAccess(path, constants.W_OK)
+}
+
+export function isWritableDirectory(path: PathLike, recursive = true, falseIfNotExists = false) {
+    const exists = existsSync(path)
+
+    if ((!exists && falseIfNotExists) || (exists && isFile(path))) {
+        return false
+    }
+
+    if (recursive && !exists) {
+        return isWritableDirectory(dirname(pathToString(path)))
+    }
+
+    return isWritable(path)
 }
 
 export function isReadableAndWritable(path: PathLike) {
