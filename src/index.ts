@@ -1,4 +1,5 @@
 export * as arr from './array'
+export * as buffer from './buffer'
 export * as cl from './class'
 export * as cli from './cli'
 export * as condition from './condition'
