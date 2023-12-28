@@ -49,11 +49,15 @@
     },
     "dependencies": {
         "@types/ws": "^8.5.10",
+        "camelcase-keys": "^9.1.2",
         "deepmerge": "^4.3.1",
+        "dotenv": "^16.3.1",
         "flat": "github:hughsk/flat#master",
         "json5": "^2.2.3",
+        "minimist": "^1.2.8",
         "p-retry": "^6.2.0",
-        "ws": "^8.15.1"
+        "ws": "^8.15.1",
+        "zod-validation-error": "^2.1.0"
     },
     "devDependencies": {
         "@commitlint/cli": "latest",
