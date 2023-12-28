@@ -55,6 +55,10 @@ export class Config<S extends AnyZodObject = AnyZodObject> {
             return (error: Error) => error
         }
 
-        return (error: Error) => (error instanceof ZodError ? fromZodError(error, formatErrorOptions) : error)
+        return (error: Error) => (this.isZodError(error) ? fromZodError(error, formatErrorOptions) : error)
+    }
+
+    protected isZodError(error: unknown): error is ZodError {
+        return error instanceof ZodError || (error instanceof Error && error.name === 'ZodError')
     }
 }
