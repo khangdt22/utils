@@ -7,8 +7,10 @@ export type ParseReviver = Parameters<typeof JSON5.parse>[1]
 
 export type StringifyReplacer = (key: string, value: any) => any
 
-export type StringifyOptions = Omit<Parameters<typeof JSON5.stringify>[1], 'replacer'> & {
+export type StringifyOptions = Omit<Parameters<typeof JSON5.stringify>[1], 'replacer' | 'space'> & {
     replacer?: StringifyReplacer | StringifyReplacer[]
+    space?: string | number
+    json5?: boolean
 }
 
 export const bigIntSerialize: StringifyReplacer = (_, value) => {
@@ -36,7 +38,7 @@ export function parse(data: string, reviver: ParseReviver | ParseReviver[] = big
 }
 
 export function stringify(data: any, options: StringifyOptions = {}) {
-    const { replacer = bigIntSerialize, ...rest } = options
+    const { replacer = bigIntSerialize, json5 = false, ...rest } = options
     const replacers = Array.isArray(replacer) ? replacer : [replacer]
 
     const rpl = (key: string, value: any) => {
@@ -47,5 +49,9 @@ export function stringify(data: any, options: StringifyOptions = {}) {
         return value
     }
 
-    return JSON5.stringify(data, { ...rest, replacer: rpl })
+    if (json5) {
+        return JSON5.stringify(data, { ...rest, replacer: rpl })
+    }
+
+    return JSON.stringify(data, rpl, rest.space)
 }
