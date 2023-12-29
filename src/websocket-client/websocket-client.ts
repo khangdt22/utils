@@ -169,7 +169,7 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
             return
         }
 
-        this.emit('close', code, notNullish(reason) ? bufferToString(reason) : undefined)
+        this.emit('close', code, notNullish(reason) ? bufferToString(reason) : undefined, reason)
         this.disconnectRequest?.resolve()
 
         if (this.state === WebsocketClientState.DISCONNECTING) {
@@ -197,7 +197,7 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
         if (isBinary) {
             this.emit('binary-message', data)
         } else {
-            this.emit('message', bufferToString(data))
+            this.emit('message', bufferToString(data), data)
         }
     }
 
@@ -206,12 +206,12 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
             this.client?.pong()
         }
 
-        this.emit('ping', notNullish(data) ? bufferToString(data) : undefined)
+        this.emit('ping', notNullish(data) ? bufferToString(data) : undefined, data)
     }
 
     protected onPong(data: Buffer) {
         this.clearPongTimer()
-        this.emit('pong', notNullish(data) ? bufferToString(data) : undefined)
+        this.emit('pong', notNullish(data) ? bufferToString(data) : undefined, data)
     }
 
     protected disconnected() {
