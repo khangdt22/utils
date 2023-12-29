@@ -1,4 +1,6 @@
 import type { Nullable } from './types'
+import { isString } from './string'
+import { isObject } from './object'
 
 export function assert(condition: boolean, message: string | Error): asserts condition {
     if (!condition) {
@@ -23,3 +25,15 @@ export const isNullish = (value: unknown): value is null | undefined => isNull(v
 export const notNullish = <T>(value: Nullable<T>): value is NonNullable<T> => !isNullish(value)
 
 export const isBoolean = (value: unknown): value is boolean => typeof value === 'boolean'
+
+export function isEmpty(value: unknown) {
+    if (isString(value) || Array.isArray(value)) {
+        return value.length === 0
+    }
+
+    if (isObject(value)) {
+        return Object.keys(value).length === 0
+    }
+
+    return !value && value !== 0 && value !== false
+}
