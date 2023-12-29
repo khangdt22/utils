@@ -169,7 +169,7 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
             return
         }
 
-        this.emit('close', code, notNullish(reason) ? bufferToString(reason) : undefined, reason)
+        this.emit('close', code, this.bufferToString(reason), reason)
         this.disconnectRequest?.resolve()
 
         if (this.state === WebsocketClientState.DISCONNECTING) {
@@ -206,12 +206,12 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
             this.client?.pong()
         }
 
-        this.emit('ping', notNullish(data) ? bufferToString(data) : undefined, data)
+        this.emit('ping', this.bufferToString(data), data)
     }
 
     protected onPong(data: Buffer) {
         this.clearPongTimer()
-        this.emit('pong', notNullish(data) ? bufferToString(data) : undefined, data)
+        this.emit('pong', this.bufferToString(data), data)
     }
 
     protected disconnected() {
@@ -240,5 +240,9 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
         }
 
         return { isEnabled: true, options: resolved }
+    }
+
+    protected bufferToString(data?: BufferLike | string) {
+        return notNullish(data) ? bufferToString(data) : undefined
     }
 }
