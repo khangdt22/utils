@@ -61,6 +61,8 @@ export function intersection<T>(a: T[], b: T[]): T[] {
     return a.filter((v) => b.includes(v))
 }
 
+export const diff = difference
+
 export function difference<T>(a: T[], b: T[]): T[] {
     return a.filter((v) => !b.includes(v))
 }
