@@ -124,6 +124,7 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
 
     protected async init() {
         this.clearTimers()
+        this.client?.removeAllListeners()
 
         const isConnected = createDeferred<void>()
         const client = this.client = new WebSocket(this.address, this.options)
