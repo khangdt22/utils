@@ -4,6 +4,32 @@ import { sleep } from './time'
 
 export type Awaitable<T> = T | PromiseLike<T>
 
+export function createLock() {
+    const locks = new Set<Promise<any>>()
+
+    async function run<T = void>(fn: () => Promise<T>): Promise<T> {
+        const promise = fn()
+
+        locks.add(promise)
+
+        try {
+            return await promise
+        } finally {
+            locks.delete(promise)
+        }
+    }
+
+    async function wait() {
+        await Promise.allSettled(locks)
+    }
+
+    function clear() {
+        locks.clear()
+    }
+
+    return { run, wait, clear }
+}
+
 export interface DeferredPromise<T> extends Promise<T> {
     resolve: (value: T | PromiseLike<T>) => void
     reject: (reason?: any) => void
