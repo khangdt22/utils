@@ -36,7 +36,7 @@ export function parse(data: string, reviver: ParseReviver | ParseReviver[] = big
 }
 
 export function stringify(data: any, options: StringifyOptions = {}) {
-    const { replacer = bigIntDeserialize, ...rest } = options
+    const { replacer = bigIntSerialize, ...rest } = options
     const replacers = Array.isArray(replacer) ? replacer : [replacer]
 
     const rpl = (key: string, value: any) => {
