@@ -1,6 +1,12 @@
+import { isString } from './string'
+
 export type BufferLike = Buffer | ArrayBuffer | Buffer[]
 
-export function bufferToString(data: BufferLike, encoding: BufferEncoding = 'utf8', separator = ''): string {
+export function bufferToString(data: BufferLike | string, encoding: BufferEncoding = 'utf8', separator = ''): string {
+    if (isString(data)) {
+        return data
+    }
+
     if (Array.isArray(data)) {
         return data.map((item) => bufferToString(item)).join(separator)
     }
