@@ -1,7 +1,7 @@
 import { accessSync, constants, type PathLike, readFileSync, writeFileSync, createReadStream, existsSync, createWriteStream, lstatSync, mkdirSync, type MakeDirectoryOptions } from 'node:fs'
 import { dirname, join, parse as parsePath } from 'node:path'
 import { createHash, type HashOptions } from 'node:crypto'
-import { mkdir, rm, unlink, writeFile } from 'node:fs/promises'
+import { mkdir, rm, unlink } from 'node:fs/promises'
 import { get } from 'node:https'
 import { Buffer } from 'node:buffer'
 import type { StringifyOptions, ParseReviver } from './json'
@@ -71,24 +71,11 @@ export function readJsonFile(path: PathLike, reviver?: ParseReviver) {
     return parse(readFileSync(path, 'utf8'), reviver)
 }
 
-export interface WriteJsonFileOptions {
-    replacer?: Parameters<typeof JSON.stringify>[1]
-    space?: Parameters<typeof JSON.stringify>[2]
-}
-
-export function writeJsonFile(path: PathLike, data: any, options: WriteJsonFileOptions = {}) {
-    writeFileSync(path, JSON.stringify(data, options.replacer, options.space), { encoding: 'utf8' })
-}
-
-export async function writeJsonFileAsync(path: PathLike, data: any, options: WriteJsonFileOptions = {}) {
-    return writeFile(path, JSON.stringify(data, options.replacer, options.space), { encoding: 'utf8' })
-}
-
-export function writeJson5File(path: PathLike, data: any, options?: StringifyOptions) {
+export function writeJsonFile(path: PathLike, data: any, options?: StringifyOptions) {
     writeFileSync(path, stringify(data, options), { encoding: 'utf8' })
 }
 
-export function writeJson5FileAsync(path: PathLike, data: any, options?: StringifyOptions) {
+export function writeJsonFileAsync(path: PathLike, data: any, options?: StringifyOptions) {
     return writeFileSync(path, stringify(data, options), { encoding: 'utf8' })
 }
 
