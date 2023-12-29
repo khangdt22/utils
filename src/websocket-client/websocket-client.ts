@@ -117,12 +117,12 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
         })
     }
 
-    public async ping(data: BufferLike | string) {
-        return this.send(data, SendType.PING)
+    public async ping(data?: BufferLike | string) {
+        return this.send(data!, SendType.PING)
     }
 
-    public async pong(data: BufferLike | string) {
-        return this.send(data, SendType.PONG)
+    public async pong(data?: BufferLike | string) {
+        return this.send(data!, SendType.PONG)
     }
 
     protected async init() {
