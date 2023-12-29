@@ -219,6 +219,11 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
     }
 
     protected disconnected() {
+        this.clearTimers()
+        this.client?.removeAllListeners()
+
+        this.client = undefined
+        this.disconnectRequest = undefined
         this.state = WebsocketClientState.DISCONNECTED
         this.emit('disconnected')
     }
