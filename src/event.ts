@@ -22,7 +22,7 @@ export class TypedEventEmitter<TEvents extends Record<string, Fn>> extends Event
         return super.off(name, listener)
     }
 
-    public override removeAllListeners<N extends keyof TEvents>(name: Extract<N, string>) {
+    public override removeAllListeners<N extends keyof TEvents>(name?: Extract<N, string>) {
         return super.removeAllListeners(name)
     }
 
