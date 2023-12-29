@@ -20,6 +20,10 @@ export function hasOwnProperty<T extends AnyObject>(obj: T, name: PropertyKey): 
     return Object.hasOwn(obj, name)
 }
 
+export function keys<T extends AnyObject>(obj: T) {
+    return Object.keys(obj) as Array<`${keyof T & (string | number | boolean | null | undefined)}`>
+}
+
 export function entries<O extends AnyObject>(obj: O) {
     return Object.entries(obj) as Array<[keyof O, O[keyof O]]>
 }
