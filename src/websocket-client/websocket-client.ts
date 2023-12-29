@@ -4,7 +4,8 @@ import { createDeferred, withTimeout, withRetry } from '../promise'
 import { resolveNestedOptions } from '../options'
 import { type BufferLike, bufferToString } from '../buffer'
 import { notNullish } from '../condition'
-import type { WebsocketClientEvents, WebsocketHeartbeatOptions as HeartbeatOptions, WebsocketClientOptions, WebsocketReconnectOptions as ReconnectOptions, WebsocketSendOptions as SendOptions } from './types'
+import { isFunction } from '../function'
+import type { WebsocketClientEvents, WebsocketHeartbeatOptions as HeartbeatOptions, WebsocketClientOptions, WebsocketReconnectOptions as ReconnectOptions, WebsocketSendOptions as SendOptions, WebsocketAutoPongMessage } from './types'
 import { WebsocketClientState, WebsocketSendType as SendType } from './constants'
 import { WebsocketError, WebsocketRequestError } from './errors'
 
@@ -12,6 +13,7 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
     public state: WebsocketClientState = WebsocketClientState.INITIAL
 
     protected readonly autoPong: boolean
+    protected readonly autoPongMessage?: WebsocketAutoPongMessage
     protected readonly autoReconnect: boolean
     protected readonly connectTimeout: number
     protected readonly requestTimeout: number
@@ -28,13 +30,14 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
     public constructor(public readonly address: string, protected readonly options: WebsocketClientOptions = {}) {
         super()
 
-        const { autoPong = true, autoReconnect = true } = options
+        const { autoPong = true, autoPongMessage, autoReconnect = true } = options
         const { connectTimeout = 10_000, requestTimeout = 10_000, disconnectTimeout = 10_000 } = options
         const { isEnabled: isHeartbeatEnabled, options: heartbeatOptions } = this.getHeartbeatOptions(options)
         const { interval: heartbeatInterval = 30_000, pongTimeout: heartbeatPongTimeout = 10_000 } = heartbeatOptions
         const { retries = 3, delay = 1000 } = options.reconnect ?? {}
 
         this.autoPong = autoPong
+        this.autoPongMessage = autoPongMessage
         this.autoReconnect = autoReconnect
         this.connectTimeout = connectTimeout
         this.requestTimeout = requestTimeout
@@ -204,7 +207,7 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
 
     protected onPing(data?: Buffer) {
         if (this.autoPong) {
-            this.client?.pong()
+            this.client?.pong(this.getAutoPongMessage(data))
         }
 
         this.emit('ping', this.bufferToString(data), data)
@@ -241,6 +244,14 @@ export class WebsocketClient extends TypedEventEmitter<WebsocketClientEvents> {
         }
 
         return { isEnabled: true, options: resolved }
+    }
+
+    protected getAutoPongMessage(pingData?: Buffer) {
+        if (isFunction(this.autoPongMessage)) {
+            return this.autoPongMessage(pingData)
+        }
+
+        return this.autoPongMessage
     }
 
     protected bufferToString(data?: BufferLike | string) {
