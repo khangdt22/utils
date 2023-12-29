@@ -4,22 +4,29 @@ import { sleep } from './time'
 
 export type Awaitable<T> = T | PromiseLike<T>
 
-export function createDeferred<T>() {
-    let resolveFn: (value: Awaitable<T>) => void = () => void 0
-    let rejectFn: (reason?: any) => void = () => void 0
+export interface DeferredPromise<T> extends Promise<T> {
+    resolve: (value: T | PromiseLike<T>) => void
+    reject: (reason?: any) => void
+    isSettled: boolean
+}
 
-    const promise = <Promise<T> & { isSettled: boolean }>new Promise<T>((resolve, reject) => {
+export function createDeferred<T>() {
+    let resolveFn: any, rejectFn: any
+
+    const promise = <DeferredPromise<T>>new Promise<T>((resolve, reject) => {
         resolveFn = resolve
         rejectFn = reject
     })
 
+    promise.resolve = resolveFn
+    promise.reject = rejectFn
     promise.isSettled = false
 
     promise.finally(() => {
         promise.isSettled = true
     })
 
-    return Object.assign(promise, { resolve: resolveFn, reject: rejectFn })
+    return promise
 }
 
 export const poll = (fn: Fn, delay = 0, immediately = true) => {
