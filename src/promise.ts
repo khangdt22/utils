@@ -4,7 +4,14 @@ import { sleep } from './time'
 
 export type Awaitable<T> = T | PromiseLike<T>
 
-export function createLock() {
+export interface PromiseLock {
+    run: <T = void>(fn: () => Promise<T>) => Promise<T>
+    wait: () => Promise<void>
+    clear: () => void
+    isWaiting: () => boolean
+}
+
+export function createLock(): PromiseLock {
     const locks = new Set<Promise<any>>()
 
     async function run<T = void>(fn: () => Promise<T>): Promise<T> {
