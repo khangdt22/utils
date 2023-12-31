@@ -23,11 +23,15 @@ export function createLock() {
         await Promise.allSettled(locks)
     }
 
+    function isWaiting() {
+        return locks.size > 0
+    }
+
     function clear() {
         locks.clear()
     }
 
-    return { run, wait, clear }
+    return { run, wait, clear, isWaiting }
 }
 
 export interface DeferredPromise<T> extends Promise<T> {
