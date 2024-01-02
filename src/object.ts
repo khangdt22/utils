@@ -16,6 +16,10 @@ export function isKeyOf<T extends AnyObject>(obj: T, name: PropertyKey): name is
     return name in obj
 }
 
+export function isKeysOf<T extends string>(data: AnyObject, keys: T[]): data is Record<T, unknown> {
+    return keys.every((key) => isKeyOf(data, key))
+}
+
 export function hasOwnProperty<T extends AnyObject>(obj: T, name: PropertyKey): name is keyof T {
     return Object.hasOwn(obj, name)
 }
