@@ -37,3 +37,15 @@ export function isEmpty(value: unknown) {
 
     return !value && value !== 0 && value !== false
 }
+
+export function isTrue(value: unknown): value is true {
+    if (isBoolean(value)) {
+        return value
+    }
+
+    if (isString(value)) {
+        return ['true', 't', 'yes', 'y', 'on', '1'].includes(value.trim().toLowerCase())
+    }
+
+    return value === 1 || value === 1n
+}
